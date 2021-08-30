@@ -17,27 +17,27 @@ export default class TaskForm extends  Component{
                 name: this.props.task.name,
                 status: this.props.task.status
             })
-            console.log(this.state);
         }
     }
 
-    static getDerivedStateFromProps(nextProps){
-        if(nextProps && nextProps.task){
-          return {
-            id : nextProps.task.id,
-            name : nextProps.task.name,
-            status : nextProps.task.status,
-           };
-        }else if(!nextProps.task) {
+    static getDerivedStateFromProps(nextProps) {
+        if(nextProps && nextProps.task !== null){
             return {
-                id: '',
-                name: '',
-                status: false
+                id: nextProps.task.id,
+                name: nextProps.task.name,
+                status: nextProps.task.status
             }
-        }else {
-           return null;
         }
     }
+
+    componentDidUpdate(prevProps, preState) {
+        if(prevProps.task !== this.props.task) {
+            this.setState({
+                id: ''
+            })
+        }
+    }
+    
 
     onCloseForm = () => {
         this.props.onCloseForm()   

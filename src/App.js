@@ -12,7 +12,11 @@ class App extends Component {
         this.state = {
             tasks: [],
             taskEdit: null,
-            isDisplayForm: false
+            isDisplayForm: false,
+            filter: {
+                name: '',
+                status:-1
+            }
         }
     }
 
@@ -53,7 +57,7 @@ class App extends Component {
 
     onSubmit = (data) => {
         let { tasks} = this.state;
-        if(data.id == '') {
+        if(data.id === '') {
             data.id = randomString.generate(); 
             tasks.push(data);
         }else {
@@ -91,6 +95,16 @@ class App extends Component {
         this.onCloseForm();
     }
 
+    onFilter = (filterName , filterStatus) => {
+        filterStatus = parseInt(filterStatus)
+        this.setState({
+            filter: {
+                name: filterName.toLowerCase(),
+                status: filterStatus
+            }
+        })
+    }
+
     onUpdate = (id) => {
         let index = this.findIndex(id);
         let { tasks } = this.state;
@@ -114,7 +128,21 @@ class App extends Component {
     }
 
     render() {
-        let { tasks, isDisplayForm, taskEdit } = this.state;
+        let { tasks, isDisplayForm, taskEdit, filter } = this.state;
+        if(filter) {
+            if(filter.name){
+                tasks = tasks.filter(task => {
+                    return task.name.toLowerCase().indexOf(filter.name) !== -1
+                })
+            }
+            tasks = tasks.filter(task => {
+                if(filter.status === -1) {
+                    return task
+                }else {
+                    return task.status === (filter.status === 1 ? true : false)
+                }
+            })
+        }
         const elmTaskForm = isDisplayForm ? 
             <TaskForm 
                 onCloseForm={this.onCloseForm} 
@@ -140,6 +168,7 @@ class App extends Component {
                             onUpdateStatus={this.onUpdateStatus} 
                             onDeleteItem={this.onDeleteItem}
                             onUpdate={this.onUpdate}
+                            onFilter={this.onFilter}
                         />
                     </div>
                 </div>
