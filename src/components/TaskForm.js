@@ -4,8 +4,38 @@ export default class TaskForm extends  Component{
     constructor(props) {
         super(props);
         this.state = {
+            id: '',
             name: '',
             status: false
+        }
+    }
+    
+    componentDidMount() {
+        if(this.props.task) {
+            this.setState({
+                id: this.props.task.id,
+                name: this.props.task.name,
+                status: this.props.task.status
+            })
+            console.log(this.state);
+        }
+    }
+
+    static getDerivedStateFromProps(nextProps){
+        if(nextProps && nextProps.task){
+          return {
+            id : nextProps.task.id,
+            name : nextProps.task.name,
+            status : nextProps.task.status,
+           };
+        }else if(!nextProps.task) {
+            return {
+                id: '',
+                name: '',
+                status: false
+            }
+        }else {
+           return null;
         }
     }
 
@@ -40,12 +70,13 @@ export default class TaskForm extends  Component{
     }
 
     render() {
-        const { name, status } = this.state;
+        const { name, status, id } = this.state;
+
         return (
             <div className="panel panel-lg panel-warning">
                 <div className="panel-heading">
                     <h3 className="panel-title">
-                    Thêm Công Việc
+                        {id !== '' ? 'Cập nhật công việc' : 'Thêm công việc'}
                     <span className="fa fa-times-circle text-right" onClick={this.onCloseForm}></span>
                     </h3>
                 </div>

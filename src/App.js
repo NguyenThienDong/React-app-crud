@@ -11,6 +11,7 @@ class App extends Component {
         super(props);
         this.state = {
             tasks: [],
+            taskEdit: null,
             isDisplayForm: false
         }
     }
@@ -26,9 +27,16 @@ class App extends Component {
 
 
     onToggleForm = () => {
-        this.setState({
-            isDisplayForm: !this.state.isDisplayForm
-        })
+        if(this.state.isDisplayForm && this.state.taskEdit !== 'null'){
+            this.setState({
+                isDisplayForm: true,
+                taskEdit: null
+            })
+        }else {
+            this.setState({
+                isDisplayForm: !this.state.isDisplayForm
+            })
+        }
     }
 
     onCloseForm = () => {
@@ -37,10 +45,21 @@ class App extends Component {
         })
     }
 
+    onShowForm = () => {
+        this.setState({
+            isDisplayForm: true
+        })
+    }
+
     onSubmit = (data) => {
         let { tasks} = this.state;
-        data.id = randomString.generate(); 
-        tasks.push(data);
+        if(data.id == '') {
+            data.id = randomString.generate(); 
+            tasks.push(data);
+        }else {
+            let index = this.findIndex(data.id);
+            tasks[index] = data;
+        }
         this.setState({
             tasks: tasks
         })
@@ -72,6 +91,16 @@ class App extends Component {
         this.onCloseForm();
     }
 
+    onUpdate = (id) => {
+        let index = this.findIndex(id);
+        let { tasks } = this.state;
+        let taskEdit = tasks[index];
+        this.setState({
+            taskEdit: taskEdit
+        })
+        this.onShowForm();
+    }
+
 
     findIndex = (id) => {
         let result = - 1;
@@ -85,9 +114,13 @@ class App extends Component {
     }
 
     render() {
-        let { tasks, isDisplayForm } = this.state;
+        let { tasks, isDisplayForm, taskEdit } = this.state;
         const elmTaskForm = isDisplayForm ? 
-            <TaskForm onCloseForm={this.onCloseForm} onSubmit={this.onSubmit}/> : '';
+            <TaskForm 
+                onCloseForm={this.onCloseForm} 
+                onSubmit={this.onSubmit}
+                task={taskEdit}
+            /> : '';
         return (
             <div className="container">
                 <div className="text-center">
@@ -102,7 +135,12 @@ class App extends Component {
                             <span className="fa fa-plus mr-5"></span>Thêm Công Việc
                         </button>
                         <TaskControl />
-                        <TaskList tasks={tasks} onUpdateStatus={this.onUpdateStatus} onDeleteItem={this.onDeleteItem}/>
+                        <TaskList 
+                            tasks={tasks} 
+                            onUpdateStatus={this.onUpdateStatus} 
+                            onDeleteItem={this.onDeleteItem}
+                            onUpdate={this.onUpdate}
+                        />
                     </div>
                 </div>
             </div>
