@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
+import TaskItem from './TaskItem';
 
 export default class TaskList extends  Component{
     render() {
+        const { tasks } = this.props;
+        const elmTasks = tasks.map((task, index) => (
+            <TaskItem key={task.id} index={index} task={task}/>
+        ))
         return(
             <div className="row mt-15">
                 <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -36,7 +41,7 @@ export default class TaskList extends  Component{
                                 </td>
                                 <td></td>
                             </tr>
-                            
+                            { elmTasks }
                         </tbody>
                     </table>
                 </div>
