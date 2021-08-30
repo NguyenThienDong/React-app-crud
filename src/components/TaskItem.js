@@ -5,6 +5,10 @@ export default class TaskItem extends Component {
         this.props.onUpdateStatus(this.props.task.id)
     }
 
+    onDeleteItem = () => {
+        this.props.onDeleteItem(this.props.task.id)
+    }
+
     render() {
         const {index, task} = this.props;
         return(

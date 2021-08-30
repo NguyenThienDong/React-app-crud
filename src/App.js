@@ -59,6 +59,20 @@ class App extends Component {
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
 
+    onDeleteItem = (id) => {
+        let index = this.findIndex(id);
+        let { tasks } = this.state;
+        if(index !== -1) {
+            tasks.splice(index, 1)
+        }
+        this.setState({
+            tasks: tasks
+        })
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        this.onCloseForm();
+    }
+
+
     findIndex = (id) => {
         let result = - 1;
         let { tasks } = this.state;
@@ -88,7 +102,7 @@ class App extends Component {
                             <span className="fa fa-plus mr-5"></span>Thêm Công Việc
                         </button>
                         <TaskControl />
-                        <TaskList tasks={tasks} onUpdateStatus={this.onUpdateStatus}/>
+                        <TaskList tasks={tasks} onUpdateStatus={this.onUpdateStatus} onDeleteItem={this.onDeleteItem}/>
                     </div>
                 </div>
             </div>
