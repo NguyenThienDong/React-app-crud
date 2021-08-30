@@ -24,27 +24,6 @@ class App extends Component {
         }
     }
 
-    onGenerateData = () => {
-        var tasks = [
-            {
-                id: randomString.generate(),
-                name: 'Học lập trình ReactJs',
-                status: true
-            }, {
-                id: randomString.generate(),
-                name: 'Học lập trình JavaScript',
-                status: true
-            }, {
-                id: randomString.generate(),
-                name: 'Học lập trình NodeJs',
-                status: false
-            }
-        ];
-        this.setState({
-            tasks: tasks
-        });
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
 
     onToggleForm = () => {
         this.setState({
@@ -58,9 +37,43 @@ class App extends Component {
         })
     }
 
+    onSubmit = (data) => {
+        let { tasks} = this.state;
+        data.id = randomString.generate(); 
+        tasks.push(data);
+        this.setState({
+            tasks: tasks
+        })
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    onUpdateStatus = (id) => {
+        let index = this.findIndex(id);
+        let { tasks } = this.state;
+        if(index !== -1) {
+            tasks[index].status = !tasks[index].status
+        }
+        this.setState({
+            tasks: tasks
+        })
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    findIndex = (id) => {
+        let result = - 1;
+        let { tasks } = this.state;
+        tasks.forEach((task, index) => {
+            if(task.id === id) {
+                result = index;
+            }
+        })
+        return result;
+    }
+
     render() {
-        const { tasks, isDisplayForm } = this.state;
-        const elmTaskForm = isDisplayForm ? <TaskForm onCloseForm={this.onCloseForm}/> : '';
+        let { tasks, isDisplayForm } = this.state;
+        const elmTaskForm = isDisplayForm ? 
+            <TaskForm onCloseForm={this.onCloseForm} onSubmit={this.onSubmit}/> : '';
         return (
             <div className="container">
                 <div className="text-center">
@@ -74,11 +87,8 @@ class App extends Component {
                         <button type="button" className="btn btn-primary mb-10" onClick={this.onToggleForm} >
                             <span className="fa fa-plus mr-5"></span>Thêm Công Việc
                         </button>
-                        <button type="button" className="btn btn-danger pr-5 mb-10" onClick={this.onGenerateData} >
-                            <span className="fa fa-plus mr-5"></span>Generate
-                        </button>
                         <TaskControl />
-                        <TaskList tasks={tasks}/>
+                        <TaskList tasks={tasks} onUpdateStatus={this.onUpdateStatus}/>
                     </div>
                 </div>
             </div>

@@ -17,14 +17,14 @@ export default class TaskSortControl extends  Component{
                     </button>
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
                         <li>
-                            <a role="button" className='sort_selected'>
+                            <a href='#' role="button" className='sort_selected'>
                                 <span className="fa fa-sort-alpha-asc pr-5">
                                     Tên A-Z
                                 </span>
                             </a>
                         </li>
                         <li>
-                            <a role="button" className='sort_selected'>
+                            <a href='#' role="button" className='sort_selected'>
                                 <span className="fa fa-sort-alpha-desc pr-5">
                                     Tên Z-A
                                 </span>
@@ -32,12 +32,12 @@ export default class TaskSortControl extends  Component{
                         </li>
                         <li role="separator" className="divider"></li>
                         <li>
-                            <a role="button" className='sort_selected'>
+                            <a href='#' role="button" className='sort_selected'>
                                 Trạng Thái Kích Hoạt
                             </a>
                         </li>
                         <li>
-                            <a role="button" className='sort_selected'>
+                            <a href='#' role="button" className='sort_selected'>
                                 Trạng Thái Ẩn
                             </a>
                         </li>
