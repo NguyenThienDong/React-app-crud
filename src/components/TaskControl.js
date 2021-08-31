@@ -6,7 +6,7 @@ export default class TaskControl extends  Component{
     render(){
         return (
             <div className="row mt-15">
-                <TaskSearchControl />
+                <TaskSearchControl onSearch={this.props.onSearch}/>
             </div>
         )
     }

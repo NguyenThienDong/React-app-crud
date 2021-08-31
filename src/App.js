@@ -13,6 +13,7 @@ class App extends Component {
             tasks: [],
             taskEdit: null,
             isDisplayForm: false,
+            keyword: '',
             filter: {
                 name: '',
                 status:-1
@@ -127,8 +128,14 @@ class App extends Component {
         return result;
     }
 
+    onSearch = (keyword) => {
+        this.setState({
+            keyword: keyword.toLowerCase()
+        })
+    }
+
     render() {
-        let { tasks, isDisplayForm, taskEdit, filter } = this.state;
+        let { tasks, isDisplayForm, taskEdit, filter, keyword } = this.state;
         if(filter) {
             if(filter.name){
                 tasks = tasks.filter(task => {
@@ -143,6 +150,13 @@ class App extends Component {
                 }
             })
         }
+
+        if(keyword) {
+            tasks = tasks.filter(task => {
+                return task.name.toLowerCase().indexOf(keyword) !== -1
+            })
+        }
+
         const elmTaskForm = isDisplayForm ? 
             <TaskForm 
                 onCloseForm={this.onCloseForm} 
@@ -162,7 +176,7 @@ class App extends Component {
                         <button type="button" className="btn btn-primary mb-10" onClick={this.onToggleForm} >
                             <span className="fa fa-plus mr-5"></span>Thêm Công Việc
                         </button>
-                        <TaskControl />
+                        <TaskControl onSearch={this.onSearch}/>
                         <TaskList 
                             tasks={tasks} 
                             onUpdateStatus={this.onUpdateStatus} 
